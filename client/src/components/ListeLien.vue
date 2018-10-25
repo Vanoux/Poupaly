@@ -5,26 +5,35 @@
     <div class="form-group">
       <div class="form-group">
         <label>Titre</label>
-        <input class="form-control" type="text" v-model="note.titleLink">
+        <input class="form-control" type="text" v-model="link.titleLink">
       </div>
       <div class="form-group">
         <label>URL</label>
-        <input class="form-control" type="text" v-model="note.url">
+        <input class="form-control" type="text" v-model="link.url">
       </div>
       <div class="form-group">
         <label>Description</label>
-        <textarea class="form-control" v-model="note.description"></textarea>
+        <textarea class="form-control" v-model="link.description"></textarea>
+      </div>
+      <div class="form-group">
+        <select v-model="link.selected" name="category" size="1">
+          <option selected disabled>Choose</option>
+          <option v-for="category in categories" :key="category.idCat">
+            {{ category.nameCat }}
+          </option>
+        </select>
       </div>
     </div>
-    <button class="btn btn-primary" @click="addNote">Submit</button>
+    <button class="btn btn-primary" @click="addLink">Submit</button>
   </div>
+  <span>Selected: {{ link.selected }}</span>
   <div class="col-sm-12">
-    <div class="col-sm-4 note" v-for="(note, index) in notes" :key="index">
+    <div class="col-sm-4 note" v-for="(link, index) in links" :key="index">
       <div class="card">
-          <button class="close" @click="removeNote(index)">&times;</button>
+          <button class="close" @click="removeLink(link.idLink)">&times;</button>
         <div class="card-block">
-          <h4 class="card-title"><a :href=note.url target="_blank">{{note.titleLink}}</a></h4>
-          <p class="card-text">{{note.description}}</p>
+          <h4 class="card-title"><a :href=link.url target="_blank">{{link.titleLink}}</a></h4>
+          <p class="card-text">{{link.description}}</p>
         </div>
       </div>
     </div>
@@ -38,48 +47,57 @@ export default {
   name: 'ListeLien',
   data: function(){ 
     return {
+        
         title: "PapalyMaster",
-        note: {
+        link: {
         titleLink: "",
         url: "",
-        description: ""
+        description: "",
+        selected: ""
         },
-        notes: [
+        links: [],
+        categories: [
           {
-            titleLink: "Wikipedia",
-            url: "www.wikipedia.org",
-            description: "wikipedia"
+            idCat: 1,
+            nameCat: "Moteur de Recherche"
+          },
+          {
+            idCat: 2,
+            nameCat: "Javascript"
           }
-        ]
+          ]
     }
   },
   mounted : function(){
     axios
       .get('http://127.0.0.1:8081/bookmarks')
-      .then(response => (this.notes = response.data))
+      .then(response => (this.links = response.data))
   },
   methods: {
     display() {
-      axios.get('http://127.0.0.1:8081/bookmarks').then(response => (this.notes = response.data))
+      axios.get('http://127.0.0.1:8081/bookmarks').then(response => (this.links = response.data))
     },
-    addNote() {
-      let { titleLink, url, description } = this.note;
+    addLink() {
+      let { titleLink, url, description } = this.link;
       axios.post('http://127.0.0.1:8081/add', {titleLink, url, description})
-      .then(resp => (
+      .then(() => (
         this.display()
       ))
       
       
       //on efface les champs après ajout
-      this.note ={
+      this.link ={
         titleLink: "",
         url: "",
         description: ""
       };
       
     },
-    removeNote(index) {
-      this.notes.splice(index, 1);
+    removeLink(index) {
+      axios.post('http://127.0.0.1:8081/remove/'+index)
+      .then(() => (
+        this.display()
+      ))
     }
   }
 }

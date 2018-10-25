@@ -7,7 +7,7 @@ app.use(bodyparser.json())
 app.use(cors())
 app.use(bodyparser.urlencoded({extended: false}));
 app.get('/bookmarks', (req, res) => {
-  var reqsql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('titleLink',titleLink,'url', url, 'description', description)),']') as list FROM Link;"
+  var reqsql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('idLink',idLink,'titleLink',titleLink,'url', url, 'description', description)),']') as list FROM Link;"
   connection.query(reqsql, function(error, results, fields){
 		if(error){
 			console.log(error);
@@ -16,6 +16,19 @@ app.get('/bookmarks', (req, res) => {
 			res.send(results[0].list);
 		}
 	})
+})
+
+app.post('/remove/:id', (req,res) =>{
+  let id=req.params.id;
+  let reqrem = `DELETE FROM Link where idLink = ${id}`;
+  connection.query(reqrem, (error, results, fields)=>{
+    if (error){
+      console.log(error);
+    }
+    else{
+      res.send(true);
+    }
+  })
 })
 
 app.post('/add',(req,res) => {
