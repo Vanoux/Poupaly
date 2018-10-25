@@ -7,7 +7,7 @@ app.use(bodyparser.json())
 app.use(cors())
 app.use(bodyparser.urlencoded({extended: false}));
 app.get('/bookmarks', (req, res) => {
-  var reqsql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('idLink',idLink,'titleLink',titleLink,'url', url, 'description', description)),']') as list FROM Link;"
+  var reqsql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('idLink',idLink,'titleLink',titleLink,'url', url, 'description', description, 'nameCat', Category.nameCat)),']') as list FROM Link, Category WHERE Category.idCat = Link.idCat;"
   connection.query(reqsql, function(error, results, fields){
 		if(error){
 			console.log(error);
@@ -16,6 +16,17 @@ app.get('/bookmarks', (req, res) => {
 			res.send(results[0].list);
 		}
 	})
+})
+
+app.get('/cat', (req, res) =>{
+  var reqcat = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('idCat',idCat,'nameCat',nameCat)),']') as listCat FROM Category;";
+  connection.query(reqcat, function(error, results, fields){
+    if(error){
+      console.log(error);
+    }else{
+      res.send(results[0].listCat);
+    }
+  })
 })
 
 app.post('/remove/:id', (req,res) =>{
@@ -35,8 +46,22 @@ app.post('/add',(req,res) => {
   var titleLink = req.body.titleLink;
   var description = req.body.description;
   var url = req.body.url;
-  var reqadd = `INSERT INTO Link (titleLink, description, url) VALUES ("${titleLink}","${description}","${url}")`;
+  var idCat = req.body.idCat;
+  var reqadd = `INSERT INTO Link (titleLink, description, url, idCat) VALUES ("${titleLink}","${description}","${url}",${idCat})`;
   connection.query(reqadd, function(error, results, fields){
+    if (error){
+      console.log(error);
+    }
+    else{
+      res.send(true);
+    }
+  })
+})
+
+app.post('/addcat',(req,res) =>{
+  var nameCat = req.body.nameCat;
+  var reqaddcat= `INSERT INTO category (nameCat) VALUES ("${nameCat}")`;
+  connection.query(reqaddcat, function(error, results, fields){
     if (error){
       console.log(error);
     }
