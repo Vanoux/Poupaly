@@ -1,0 +1,36 @@
+const express = require('express')
+const bodyparser = require('body-parser')
+const cors = require('cors')
+const connection=require('./bdd.js')
+const app = express()
+app.use(bodyparser.json())
+app.use(cors())
+app.use(bodyparser.urlencoded({extended: false}));
+app.get('/bookmarks', (req, res) => {
+  var reqsql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('titleLink',titleLink,'url', url, 'description', description)),']') as list FROM Link;"
+  connection.query(reqsql, function(error, results, fields){
+		if(error){
+			console.log(error);
+		}
+		else {
+			res.send(results[0].list);
+		}
+	})
+})
+
+app.post('/add',(req,res) => {
+  var titleLink = req.body.titleLink;
+  var description = req.body.description;
+  var url = req.body.url;
+  var reqadd = `INSERT INTO Link (titleLink, description, url) VALUES ("${titleLink}","${description}","${url}")`;
+  connection.query(reqadd, function(error, results, fields){
+    if (error){
+      console.log(error);
+    }
+    else{
+      res.send(true);
+    }
+  })
+})
+
+app.listen(process.env.PORT || 8081)
