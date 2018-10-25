@@ -4,6 +4,9 @@ Objectif :  En vous inspirant du site papaly, vous allez créer une application 
 Equipe : Vanessa & Clément
 
 Planning poker : https://pokrex.com/rooms/poupaly
+
 Kanban Trello : https://trello.com/b/udvY7KL6/poupaly
+
 Journal de bord : https://github.com/Vanoux/Poupaly/wiki/Home-Journal-de-bord-Poupaly
+
 Hébergement :
