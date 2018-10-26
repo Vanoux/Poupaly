@@ -92,16 +92,16 @@
     },
     mounted: function () {
       axios
-        .get('http://127.0.0.1:8081/bookmarks')
+        .get('http://serveur-poopaly.herokuapp.com/bookmarks')
         .then(response => (this.links = response.data))
       axios
-        .get('http://127.0.0.1:8081/cat')
+        .get('http://serveur-poopaly.herokuapp.com/cat')
         .then(response => (this.categories = response.data, this.link.idCat=response.data[0].idCat))
     },
     methods: {
       display() {
-        axios.get('http://127.0.0.1:8081/bookmarks').then(response => (this.links = response.data))
-        axios.get('http://127.0.0.1:8081/cat').then(response => (this.categories = response.data, this.link.idCat=response.data[0].idCat))
+        axios.get('http://serveur-poopaly.herokuapp.com/bookmarks').then(response => (this.links = response.data))
+        axios.get('http://serveur-poopaly.herokuapp.com/cat').then(response => (this.categories = response.data, this.link.idCat=response.data[0].idCat))
       },
       addLink() {
         let {
@@ -112,7 +112,7 @@
         } = this.link;
         
         if (this.link.idCat!=-1 && this.link.titleLink!="" && this.link.url!=""){
-          axios.post('http://127.0.0.1:8081/add', {
+          axios.post('http://serveur-poopaly.herokuapp.com/add', {
               titleLink,
               url,
               description,
@@ -133,7 +133,7 @@
         }
       },
       removeLink(index) {
-        axios.post('http://127.0.0.1:8081/remove/' + index)
+        axios.post('http://serveur-poopaly.herokuapp.com/remove/' + index)
           .then(() => (
             this.display()
           ))
@@ -141,7 +141,7 @@
       addCat() {
         let nameCat = this.category.nameCat
         if (nameCat!=""){
-          axios.post('http://127.0.0.1:8081/addcat', {
+          axios.post('http://serveur-poopaly.herokuapp.com/addcat', {
               nameCat
             })
             .then(() => (
@@ -156,7 +156,7 @@
         }
       },
       removeCategory(index) {
-        axios.post('http://127.0.0.1:8081/removecat/' + index)
+        axios.post('http://serveur-poopaly.herokuapp.com/removecat/' + index)
           .then(() => (
             this.display()
           ))
