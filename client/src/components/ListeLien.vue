@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <h3>{{title}}</h3>
+    <h1 class="text-info">{{title}}</h1>
     <div class="row">
       <div class="col-sm-6">
-        <h4>Ajouter un lien</h4>
+        <h3>Ajouter un lien</h3>
         <div class="form">
           <div class="form-group">
             <div class="form-group">
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <h4>Ajouter une catégorie</h4>
+        <h3>Ajouter une catégorie</h3>
         <div class="form">
           <div class="form-group">
             <div class="form-group">
@@ -52,13 +52,14 @@
           <h3 class="card-header text-center">{{category.nameCat}}</h3>
           <!-- card link -->
           <!-- Boucle secondaire: link -->
-          <div class="card" v-for="(link, index) in links" :key="index" v-if="(link.idCat == category.idCat)">
+          <div class="card bg-info" v-for="(link, index) in links" :key="index" v-if="(link.idCat == category.idCat)">
             <button class="close" @click="removeLink(link.idLink)">&times;</button>
             <div class="card-block">
               <h4 class="card-title"><a :href=link.url target="_blank">{{link.titleLink}}</a></h4>
               <p class="card-text">{{link.description}}</p>
             </div>
           </div>
+        <br>
           <!-- Fin boucle secondaire: link -->
         </div>
       </div>
