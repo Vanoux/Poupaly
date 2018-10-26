@@ -71,4 +71,25 @@ app.post('/addcat',(req,res) =>{
   })
 })
 
+app.post('/removeCat/:id', (req,res) =>{
+  let id=req.params.id;
+  let reqremlink = `DELETE FROM Link where idCat = ${id}`;
+  connection.query(reqremlink, (error, results, fields)=>{
+    if (error){
+      console.log(error);
+    }
+    else{
+      let reqremcat = `DELETE FROM category where idCat = ${id}`;
+      connection.query(reqremcat, (err, resu, fld)=>{
+        if (err){
+          console.log(err);
+        }
+        else {
+          res.send(true);
+        }
+      })
+    }
+  })
+})
+
 app.listen(process.env.PORT || 8081)
