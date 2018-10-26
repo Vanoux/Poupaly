@@ -7,7 +7,7 @@ app.use(bodyparser.json())
 app.use(cors())
 app.use(bodyparser.urlencoded({extended: false}));
 app.get('/bookmarks', (req, res) => {
-  var reqsql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('idLink',idLink,'titleLink',titleLink,'url', url, 'description', description, 'nameCat', Category.nameCat)),']') as list FROM Link, Category WHERE Category.idCat = Link.idCat;"
+  var reqsql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('idLink',idLink,'titleLink',titleLink,'url', url, 'description', description, 'idCat', idCat)),']') as list FROM Link;"
   connection.query(reqsql, function(error, results, fields){
 		if(error){
 			console.log(error);

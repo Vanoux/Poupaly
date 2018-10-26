@@ -44,22 +44,25 @@
       </div>
     </div>
     <div class="col-sm-12">
-      <div class="col-sm-3 note" v-for="(link, index) in links" :key="index">
+      <!-- boucle principale: Categories -->
+      <div class="col-sm-3 note" v-for="(category, index) in categories" :key="index">
         <!-- card category -->
         <div class="card">
-          <button class="close" @click="removeLink(link.idCat)">&times;</button>
-          <h3 class="card-header text-center">{{link.nameCat}}</h3>
+          <button class="close" @click="removeCategory(category.idCat)">&times;</button>
+          <h3 class="card-header text-center">{{category.nameCat}}</h3>
           <!-- card link -->
-          <div class="card">
+          <!-- Boucle secondaire: link -->
+          <div class="card" v-for="(link, index) in links" :key="index" v-if="(link.idCat == category.idCat)">
             <button class="close" @click="removeLink(link.idLink)">&times;</button>
             <div class="card-block">
               <h4 class="card-title"><a :href=link.url target="_blank">{{link.titleLink}}</a></h4>
               <p class="card-text">{{link.description}}</p>
-              <p class="card-subtitle mb-2 text-muted">{{link.nameCat}}</p>
             </div>
           </div>
+          <!-- Fin boucle secondaire: link -->
         </div>
       </div>
+      <!-- fin boucle principale: Categories -->
     </div>
 
   </div>
@@ -143,6 +146,12 @@
         this.category = {
           nameCat: ""
         };
+      },
+      removeCategory(index) {
+        axios.post('http://127.0.0.1:8081/removecat/' + index)
+          .then(() => (
+            this.display()
+          ))
       }
     }
   }
