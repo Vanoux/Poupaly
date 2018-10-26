@@ -95,12 +95,12 @@
         .then(response => (this.links = response.data))
       axios
         .get('http://127.0.0.1:8081/cat')
-        .then(response => (this.categories = response.data))
+        .then(response => (this.categories = response.data, this.link.idCat=response.data[0].idCat))
     },
     methods: {
       display() {
         axios.get('http://127.0.0.1:8081/bookmarks').then(response => (this.links = response.data))
-        axios.get('http://127.0.0.1:8081/cat').then(response => (this.categories = response.data))
+        axios.get('http://127.0.0.1:8081/cat').then(response => (this.categories = response.data, this.link.idCat=response.data[0].idCat))
       },
       addLink() {
         let {
