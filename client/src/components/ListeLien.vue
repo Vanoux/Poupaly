@@ -75,7 +75,7 @@
     data: function () {
       return {
 
-        title: "PapalyMaster",
+        title: "PoopalyMaster",
         category: {
           nameCat: "",
         },
@@ -83,7 +83,7 @@
           titleLink: "",
           url: "",
           description: "",
-          idCat: 1
+          idCat: -1
         },
         links: [],
         categories: []
@@ -109,24 +109,27 @@
           description,
           idCat
         } = this.link;
-        axios.post('http://127.0.0.1:8081/add', {
-            titleLink,
-            url,
-            description,
-            idCat
-          })
-          .then(() => (
-            this.display()
-          ))
-
-
-        //on efface les champs après ajout
-        this.link = {
-          titleLink: "",
-          url: "",
-          description: "",
-          idCat: 1
-        };
+        
+        if (this.link.idCat!=-1 && this.link.titleLink!="" && this.link.url!=""){
+          axios.post('http://127.0.0.1:8081/add', {
+              titleLink,
+              url,
+              description,
+              idCat
+            })
+            .then(() => (
+              this.display()
+            ))
+          //on efface les champs après ajout
+          this.link = {
+            titleLink: "",
+            url: "",
+            description: "",
+            idCat: 1
+          };
+        }else{
+          alert("Vérifiez les champs du lien !");
+        }
       },
       removeLink(index) {
         axios.post('http://127.0.0.1:8081/remove/' + index)
@@ -136,16 +139,20 @@
       },
       addCat() {
         let nameCat = this.category.nameCat
-        axios.post('http://127.0.0.1:8081/addcat', {
-            nameCat
-          })
-          .then(() => (
-            this.display()
-          ))
-        //on efface les champs après ajout
-        this.category = {
-          nameCat: ""
-        };
+        if (nameCat!=""){
+          axios.post('http://127.0.0.1:8081/addcat', {
+              nameCat
+            })
+            .then(() => (
+              this.display()
+            ))
+          //on efface les champs après ajout
+          this.category = {
+            nameCat: ""
+          };
+        }else{
+          alert("La catégorie ne peut pas être vide !")
+        }
       },
       removeCategory(index) {
         axios.post('http://127.0.0.1:8081/removecat/' + index)
